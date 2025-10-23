@@ -20,6 +20,11 @@ build/
 *.swo
 *~
 .DS_Store
+.claude/
+users/
+
+prompts/
+notes/
 
 # OS files
 Thumbs.db
