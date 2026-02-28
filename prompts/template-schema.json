@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gemini Prompt Template",
+  "type": "object",
+  "required": ["id", "version", "angle_type", "prompt", "parameters"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^angle-[a-z0-9-]+$|^isometric-[a-z0-9-]+$|^top-[a-z0-9-]+$|^side-[a-z0-9-]+$",
+      "description": "Unique identifier for this template"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version number"
+    },
+    "angle_type": {
+      "type": "string",
+      "enum": ["0deg", "45deg", "90deg", "135deg", "180deg", "270deg", "isometric", "orthographic", "profile"],
+      "description": "Type of angle this template generates"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what this template produces"
+    },
+    "prompt": {
+      "type": "object",
+      "required": ["system", "user"],
+      "properties": {
+        "system": {
+          "type": "string",
+          "description": "System message defining AI role/context"
+        },
+        "user": {
+          "type": "string",
+          "description": "Main prompt with variable placeholders"
+        },
+        "negative": {
+          "type": "string",
+          "description": "What to avoid in generation"
+        }
+      }
+    },
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Creativity level (0=deterministic, 1=creative)"
+        },
+        "top_p": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Nucleus sampling threshold"
+        },
+        "top_k": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Top-k sampling limit"
+        },
+        "max_output_tokens": {
+          "type": "integer",
+          "minimum": 256,
+          "maximum": 4096,
+          "description": "Maximum tokens in response"
+        }
+      }
+    },
+    "reference_examples": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Paths to example images showing desired output"
+    },
+    "variables": {
+      "type": "object",
+      "description": "Available placeholder variables and their descriptions"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "created_by": { "type": "string" },
+        "created_date": { "type": "string" },
+        "last_updated": { "type": "string" },
+        "cost_per_generation": { "type": "string" },
+        "avg_generation_time_sec": { "type": "number" },
+        "success_rate_percent": { "type": ["number", "null"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "angle-135deg-top",
+  "version": "1.0.0",
+  "angle_type": "135deg",
+  "description": "Generate overhead view with product rotated 135° clockwise",
+  "prompt": {
+    "system": "You are a professional e-commerce product photographer specializing in multi-angle product shots for online retail.",
+    "user": "Create a professional product photograph from directly overhead (0° top-down view) with the product rotated 135 degrees clockwise from its standard position.\n\nProduct: {product_name}\n\nTechnical Requirements:\n- Viewing angle: Straight down from above (0° overhead)\n- Product rotation: 135° clockwise from base orientation\n- Background: Pure white seamless (#FFFFFF)\n- Lighting: Soft, even studio lighting\n- Shadows: Minimal, soft drop shadow acceptable\n- Focus: Crystal clear throughout\n- Composition: Centered, 60-70% frame fill\n- Resolution: 2048x2048 pixels\n\nKey Point: The CAMERA remains overhead, but the PRODUCT is rotated 135° compared to the 0° angle view. This provides another diagonal perspective of the product.\n\nStyling:\n- Clean e-commerce aesthetic\n- No decorative elements\n- Neutral color temperature\n- Professional studio quality",
+    "negative": "blur, distortion, watermarks, text, logos, low quality, harsh shadows, dark background, cluttered, angled camera, side perspective, 3D view, tilted angle, incorrect rotation"
+  },
+  "parameters": {
+    "temperature": 0.3,
+    "top_p": 0.8,
+    "top_k": 40,
+    "max_output_tokens": 2048
+  },
+  "reference_examples": [
+    "../prototype/images/l-shape-angle-135deg-top.png"
+  ],
+  "variables": {
+    "product_name": "Name/description of the product"
+  },
+  "metadata": {
+    "created_by": "Agent 2 - Prompt Engineer",
+    "created_date": "2025-10-23",
+    "last_updated": "2025-10-23",
+    "cost_per_generation": "$0.02"
+  }
+}

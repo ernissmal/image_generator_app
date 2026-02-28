@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoGen AI - Angle Generation</title>
+    <link rel="stylesheet" href="css/angle-generator.css">
+</head>
+<body>
+
+<!-- Welcome Screen -->
+<div id="welcomeScreen" class="screen active">
+    <div class="app-header">
+        <div class="container">
+            <div class="logo">📸 PhotoGen AI</div>
+            <div class="trial-badge">Free Trial: 3/3 remaining</div>
+        </div>
+    </div>
+
+    <div class="welcome-container">
+        <h1>AI-Powered Product Photography</h1>
+        <p class="subtitle">Transform one photo into professional product shots from multiple angles</p>
+
+        <!-- Upload Zone -->
+        <div id="uploadZone" class="upload-zone">
+            <div class="upload-icon">📁</div>
+            <h3>Drop your product image here</h3>
+            <p>or click to browse</p>
+            <input type="file" id="fileInput" accept="image/jpeg,image/png" style="display: none;">
+            <p class="upload-hint">JPG or PNG • Max 10MB • Min 500x500px</p>
+        </div>
+
+        <!-- Upload Preview -->
+        <div id="uploadPreview" class="upload-preview" style="display: none;">
+            <img id="previewImage" alt="Uploaded product">
+            <div class="preview-actions">
+                <button class="btn-secondary" onclick="resetUpload()">Change Image</button>
+                <button class="btn-primary" onclick="startGeneration()">Generate Angles →</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stage 1: Angle Selection -->
+<div id="stage1" class="screen">
+    <div class="app-header">
+        <div class="container">
+            <div class="logo-small">PhotoGen AI</div>
+            <div class="trial-badge">Free Trial: 2/3 remaining</div>
+        </div>
+    </div>
+
+    <div class="workflow-container">
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step completed">
+                <div class="step-number">✓</div>
+                <div class="step-label">Upload</div>
+            </div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Angles</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">Environment</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-label">Polish</div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-label">Download</div>
+            </div>
+        </div>
+
+        <div class="workflow-content">
+            <h2 class="workflow-title">Stage 1: Choose Your Angles</h2>
+            <p class="workflow-subtitle">AI is generating 9 angle variations. Pick your favorite 3.</p>
+
+            <!-- Loading State -->
+            <div id="generationLoading" class="generation-loading">
+                <div class="spinner"></div>
+                <p class="loading-message">Generating angles...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="angleProgress"></div>
+                </div>
+                <p class="loading-detail">This takes about 2-3 minutes</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="generationError" class="generation-error" style="display: none;">
+                <span class="error-icon">⚠️</span>
+                <h3>Generation Failed</h3>
+                <p id="errorMessage"></p>
+                <button class="btn-primary" onclick="retryGeneration()">Try Again</button>
+            </div>
+
+            <!-- Angle Selection Grid -->
+            <div id="angleSelectionGrid" class="selection-grid" style="display: none;">
+                <!-- Will be populated dynamically with generated angles -->
+            </div>
+
+            <div class="workflow-actions" id="angleActions" style="display: none;">
+                <button class="btn-secondary" onclick="regenerateAngles()">↻ Regenerate All</button>
+                <button class="btn-primary" id="continueStage1" onclick="continueToNextStage()" disabled>
+                    Continue to Environments →
+                </button>
+            </div>
+
+            <div class="selection-counter" id="angleCounter" style="display: none;">
+                <span id="angleCounterNum">0</span> of 3 angles selected
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stage 2: Environment Selection (Placeholder) -->
+<div id="stage2" class="screen">
+    <div class="app-header">
+        <div class="container">
+            <div class="logo-small">PhotoGen AI</div>
+        </div>
+    </div>
+    <div class="workflow-container">
+        <h2>Stage 2: Environment Generation</h2>
+        <p>Coming soon...</p>
+    </div>
+</div>
+
+<script src="js/angle-generator.js"></script>
+</body>
+</html>

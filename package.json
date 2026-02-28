@@ -1,0 +1,38 @@
+{
+  "name": "image_generator_app",
+  "version": "1.0.0",
+  "description": "A modern image generation application built with cutting-edge technology.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ernissmal/image_generator_app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ernissmal/image_generator_app/issues"
+  },
+  "homepage": "https://github.com/ernissmal/image_generator_app#readme",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "ajv": "^8.17.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "multer": "^2.0.2",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
+  }
+}

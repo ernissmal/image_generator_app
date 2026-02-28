@@ -1,0 +1,31 @@
+{
+  "id": "angle-0deg-top",
+  "version": "1.1.0",
+  "angle_type": "0deg",
+  "description": "Generate direct overhead (0° top-down) product view",
+  "prompt": {
+    "system": "You are a master e-commerce product photographer with 15 years of experience creating listing images for Amazon, Shopify, and Etsy. Your overhead flat-lay photographs increase conversion rates by 40% because they help online shoppers accurately understand product dimensions, shape, and surface details. You've photographed over 100,000 products and your images consistently meet the strict quality standards of major retail platforms. Your specialty is making products look professional, trustworthy, and true-to-life while maintaining perfect technical precision.",
+    "user": "Photograph {product_name} from a perfect bird's eye view, positioning your camera directly overhead at exactly 0 degrees—imagine looking straight down from the ceiling of a professional photography studio. This overhead perspective is crucial for e-commerce customers to understand the product's true footprint, shape, and surface features as if the item were laid flat on a table in front of them.\n\nSet up a three-point softbox lighting system with 5600K color temperature bulbs, creating gentle wraparound illumination that reveals every contour and surface detail of the product. The lighting should be soft and diffused, coming from multiple angles to eliminate harsh shadows while maintaining just enough definition to show the product's dimensional form. Against the seamless pure white backdrop (#FFFFFF), the product appears to float weightlessly, with perhaps only the most delicate hint of a drop shadow beneath to ground it naturally.\n\nCompose the shot with the product perfectly centered in the frame, occupying about 60-70% of the image area—close enough for customers to see fine details, yet with sufficient breathing room to maintain a clean, uncluttered aesthetic. Every edge is razor-sharp and in crystal-clear focus from corner to corner at 2048x2048 pixel resolution. The neutral white balance ensures colors appear true-to-life, exactly as they would in person. Subtle highlights dance across the product's surfaces where the light catches curves and edges, providing just enough visual information to convey its three-dimensional form without introducing distracting glare or blown-out bright spots.\n\nThis image serves as the primary product listing photo, the first impression that online shoppers will see, so it must radiate professional quality and trustworthiness while remaining simple and direct.",
+    "negative": "Avoid blurred or soft focus areas. The image should maintain perfect parallel perspective without fisheye distortion or angled viewpoints. Keep the background completely clean and uncluttered, free from any watermarks, text overlays, logos, or decorative props. Eliminate harsh directional shadows or dramatic dark shadows that obscure product details. The background remains pure white or light neutral tones, never dark, colored, or gradient. Avoid any tilted camera angles, side perspectives, or 3D angled views that would introduce perspective distortion. Maintain complete edge clarity without vignetting or cropped boundaries."
+  },
+  "parameters": {
+    "temperature": 0.3,
+    "top_p": 0.8,
+    "top_k": 40,
+    "max_output_tokens": 2048
+  },
+  "reference_examples": [
+    "../prototype/images/l-shape-angle-0deg-top.png"
+  ],
+  "variables": {
+    "product_name": "Name/description of the product being photographed"
+  },
+  "metadata": {
+    "created_by": "Agent 2 - Prompt Engineer",
+    "created_date": "2025-10-23",
+    "last_updated": "2025-11-03",
+    "cost_per_generation": "$0.02",
+    "avg_generation_time_sec": 15,
+    "success_rate_percent": null
+  }
+}

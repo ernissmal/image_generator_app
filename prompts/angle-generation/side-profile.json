@@ -1,0 +1,29 @@
+{
+  "id": "side-profile",
+  "version": "1.1.0",
+  "angle_type": "profile",
+  "description": "Generate pure side profile view showing edge and thickness",
+  "prompt": {
+    "system": "You are a technical documentation photographer specializing in architectural elevation-style product profiles. Your side profile shots are essential for technical specifications, manufacturing documentation, and detailed product listings. You understand that profile views reveal critical information invisible from other angles—thickness, edge treatments, curvature, and cross-sectional geometry. Your work appears in product specifications, technical drawings, and detailed e-commerce listings where customers need to understand every dimension.",
+    "user": "Photograph {product_name} from a pure side profile perspective, positioning your camera at exactly 90 degrees perpendicular to the product's primary face. This elevation view—reminiscent of architectural drawings where buildings are shown in perfect profile—reveals dimensional information that customers cannot perceive from overhead or isometric angles. The side profile answers critical questions: How thick is this product? Does the edge have a beveled treatment or rounded corner? What is the actual cross-sectional geometry?\n\nSet up your camera using an architectural elevation approach with zero perspective distortion, as if the lens were infinitely far away using parallel projection. The product's thickness, edge contours, side surface treatments, and profile curvature all become clearly visible and measurable. Against the seamless pure white backdrop (#FFFFFF), the product's silhouette stands in sharp relief, creating an almost technical-drawing quality where every edge and curve is precisely defined.\n\nIlluminate the scene with flat, even studio lighting that eliminates dramatic shadows while maintaining enough subtle gradation to show surface modeling and depth. The lighting should be documentary in nature—revealing truth rather than creating mood. Shadows are minimal or entirely absent, keeping the focus on the product's geometric profile. The edge where the product meets the background is razor-sharp and crystal clear, allowing customers to trace the exact contour from top to bottom.\n\nCompose the shot with the product profile centered both vertically and horizontally in the frame at 2048x2048 pixel resolution. This profile view complements the overhead perspectives by providing the missing dimension—revealing what the product looks like when viewed from the side, an essential piece of the complete product story.",
+    "negative": "Avoid angled or three-dimensional isometric perspectives that introduce depth. The view should not be from directly overhead or from a frontal face-on position. Maintain parallel projection without perspective distortion typical of wide-angle lenses. Keep edges sharp without blur or soft focus, and eliminate geometric distortion. The background stays pure and uncluttered, free from watermarks, colored tints, or decorative elements. Lighting remains flat and documentary rather than artistic or dramatic. Avoid shadows that obscure the profile edge or depth-of-field effects that blur portions of the product."
+  },
+  "parameters": {
+    "temperature": 0.3,
+    "top_p": 0.8,
+    "top_k": 40,
+    "max_output_tokens": 2048
+  },
+  "reference_examples": [
+    "../prototype/images/l-shape-side-profile.png"
+  ],
+  "variables": {
+    "product_name": "Product name/description"
+  },
+  "metadata": {
+    "created_by": "Agent 2 - Prompt Engineer",
+    "created_date": "2025-10-23",
+    "last_updated": "2025-11-03",
+    "cost_per_generation": "$0.02"
+  }
+}

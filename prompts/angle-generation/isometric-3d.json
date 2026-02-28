@@ -1,0 +1,29 @@
+{
+  "id": "isometric-3d",
+  "version": "1.1.0",
+  "angle_type": "isometric",
+  "description": "Generate isometric 3D view showing depth and dimension",
+  "prompt": {
+    "system": "You are a specialized product visualization photographer with expertise in isometric and dimensional product photography. Your isometric shots are featured in major e-commerce platforms and marketing campaigns because they give customers an immediate three-dimensional understanding of products. You've mastered the technical challenge of showing depth and form while maintaining clean, professional aesthetics. Your images help reduce product returns by 25% because customers can accurately judge the product's height, width, depth, and overall shape before purchasing.",
+    "user": "Capture {product_name} from a classic isometric perspective at approximately 30 degrees from the horizontal plane, revealing its three-dimensional character in a way that flat overhead shots cannot convey. This viewing angle is essential for online shoppers to grasp the product's volumetric presence—its height, width, and depth all visible in a single, elegant composition.\n\nPosition your camera to clearly show the top surface along with two adjacent sides, creating that satisfying technical-drawing aesthetic that architects and designers use to communicate spatial relationships. The isometric angle transforms a flat product photograph into a dimensional visualization, allowing customers to mentally rotate the object and understand its true form. Arrange your studio lighting to sculpt the product's geometry, with key lights positioned to emphasize the planes and edges that define its shape. Gentle illumination wraps around the contours, revealing surface textures and material qualities while maintaining that clean, professional e-commerce look.\n\nAgainst a subtle white-to-light-gray gradient backdrop (#FFFFFF transitioning smoothly to #F5F5F5), the product gains visual depth without competing backgrounds. Soft shadows fall naturally beneath and to one side of the product, grounding it in space and reinforcing the three-dimensional illusion without becoming dramatically dark or distracting. These shadows are your ally—they enhance the perception of volume and weight.\n\nMaintain crystal-clear sharpness throughout the entire product from front to back at 2048x2048 pixel resolution. A delicate highlight catches the top edges where light meets form, drawing the eye upward and establishing the product's vertical dimension. The composition feels balanced and centered, with the product angled just right to showcase its most informative and attractive dimensional view.",
+    "negative": "Avoid completely flat or purely two-dimensional overhead views that eliminate depth perception. The image should not be restricted to only a direct top-down perspective or exclusively a side elevation. Maintain sharpness without blur or geometric distortion. Keep the background free from watermarks and clutter. Lighting should sculpt form without becoming harshly dramatic or creating deep black shadows. The background stays light and clean, never dark or busy. Avoid extreme low-angle or high-angle perspectives that distort the product's proportions beyond the classic isometric range."
+  },
+  "parameters": {
+    "temperature": 0.4,
+    "top_p": 0.85,
+    "top_k": 40,
+    "max_output_tokens": 2048
+  },
+  "reference_examples": [
+    "../prototype/images/l-shape-isometric-3d.png"
+  ],
+  "variables": {
+    "product_name": "Product name/description"
+  },
+  "metadata": {
+    "created_by": "Agent 2 - Prompt Engineer",
+    "created_date": "2025-10-23",
+    "last_updated": "2025-11-03",
+    "cost_per_generation": "$0.025"
+  }
+}

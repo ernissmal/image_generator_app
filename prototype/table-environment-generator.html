@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table Environment Generator</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container { max-width: 1400px; margin: 0 auto; }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    h1 { font-size: 3rem; margin-bottom: 10px; font-weight: 700; }
+    .subtitle { font-size: 1.2rem; opacity: 0.95; font-weight: 300; }
+
+    .workflow-steps {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 15px 25px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .step.active {
+      background: white;
+      color: #667eea;
+    }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .card h2 {
+      margin-bottom: 25px;
+      color: #2d3748;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    /* Upload Section */
+    .upload-zone {
+      border: 3px dashed #cbd5e0;
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #f7fafc;
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .upload-zone:hover {
+      border-color: #667eea;
+      background: #edf2f7;
+      transform: translateY(-2px);
+    }
+
+    .upload-zone.has-file {
+      border-color: #48bb78;
+      background: #f0fff4;
+    }
+
+    .upload-zone input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    .upload-icon { font-size: 3rem; margin-bottom: 15px; }
+    .upload-text { font-size: 1.1rem; color: #4a5568; font-weight: 600; margin-bottom: 8px; }
+    .upload-hint { font-size: 0.9rem; color: #718096; }
+
+    .table-preview {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .table-preview.visible { display: block; }
+
+    .table-preview img {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+    }
+
+    .table-info {
+      background: #f7fafc;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #4a5568;
+    }
+
+    /* Environment Selection */
+    .env-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .env-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .env-card:hover {
+      border-color: #667eea;
+      background: #f7fafc;
+      transform: translateX(4px);
+    }
+
+    .env-card.selected {
+      border-color: #667eea;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .env-icon {
+      font-size: 2rem;
+      width: 50px;
+      text-align: center;
+    }
+
+    .env-info {
+      flex: 1;
+    }
+
+    .env-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .env-desc {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    /* Generate Button */
+    .generate-btn {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .generate-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+    }
+
+    .generate-btn:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .generate-info {
+      margin-top: 15px;
+      padding: 15px;
+      background: #ebf8ff;
+      border-left: 4px solid #4299e1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #2c5282;
+    }
+
+    /* Results Grid */
+    .results-container {
+      min-height: 400px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: #718096;
+    }
+
+    .empty-state-icon { font-size: 5rem; margin-bottom: 20px; opacity: 0.3; }
+    .empty-state-text { font-size: 1.2rem; font-weight: 500; }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      display: none;
+    }
+
+    .results-grid.visible { display: grid; }
+
+    .result-item {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      border: 3px solid #e2e8f0;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .result-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .result-item.selected {
+      border-color: #48bb78;
+      box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);
+    }
+
+    .result-item.generating {
+      border-color: #f39c12;
+    }
+
+    .result-image {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      background: #f7fafc;
+    }
+
+    .result-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: white;
+    }
+
+    .result-item.generating .result-overlay {
+      display: flex;
+    }
+
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .result-info {
+      padding: 15px;
+      background: #f7fafc;
+    }
+
+    .result-table {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 5px;
+      font-size: 0.95rem;
+    }
+
+    .result-env {
+      font-size: 0.85rem;
+      color: #718096;
+      margin-bottom: 8px;
+    }
+
+    .result-angle {
+      font-size: 0.8rem;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .selection-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #48bb78;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+    }
+
+    .result-item.selected .selection-badge {
+      display: flex;
+    }
+
+    /* Action Bar */
+    .action-bar {
+      position: sticky;
+      bottom: 20px;
+      margin-top: 30px;
+      display: none;
+      gap: 15px;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .action-bar.visible {
+      display: flex;
+    }
+
+    .action-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .selection-count {
+      background: #667eea;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+    }
+
+    .action-btn {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-regenerate {
+      background: #f39c12;
+      color: white;
+    }
+
+    .btn-regenerate:hover {
+      background: #e67e22;
+      transform: translateY(-2px);
+    }
+
+    .btn-download {
+      background: #48bb78;
+      color: white;
+    }
+
+    .btn-download:hover {
+      background: #38a169;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 1200px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .results-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🪑 Table Environment Generator</h1>
+      <p class="subtitle">Upload clean table photos → Generate in various environments → Select & Download</p>
+    </header>
+
+    <div class="workflow-steps">
+      <div class="step active" id="step1">1. Upload Table</div>
+      <div class="step" id="step2">2. Select Environment</div>
+      <div class="step" id="step3">3. Generate Images</div>
+      <div class="step" id="step4">4. Select & Download</div>
+    </div>
+
+    <div class="main-layout">
+      <!-- Control Panel -->
+      <div class="card">
+        <h2>Configuration</h2>
+
+        <!-- Upload Table -->
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="tableFile" accept="image/*">
+          <div class="upload-icon">🪑</div>
+          <div class="upload-text">Upload Clean Table Photo</div>
+          <div class="upload-hint">PNG, JPG up to 10MB</div>
+        </div>
+
+        <div class="table-preview" id="tablePreview">
+          <img id="previewImage" alt="Table preview">
+          <div class="table-info">
+            <strong>Table uploaded:</strong> <span id="tableName"></span>
+          </div>
+        </div>
+
+        <!-- Environment Selection -->
+        <h3 style="margin-bottom: 15px; color: #2d3748; font-size: 1.1rem;">Select Environment</h3>
+        <div class="env-grid" id="envGrid">
+          <!-- Loaded dynamically -->
+        </div>
+
+        <!-- Generate Button -->
+        <button class="generate-btn" id="generateBtn" disabled>
+          🎨 Generate 6 Images
+        </button>
+
+        <div class="generate-info">
+          <strong>How it works:</strong> The app will generate 6 images of your table placed in the selected environment, each with a random camera angle to create natural variation.
+        </div>
+      </div>
+
+      <!-- Results Panel -->
+      <div class="card results-container">
+        <h2>Generated Images <span id="resultCount" style="color: #667eea;"></span></h2>
+
+        <div class="empty-state" id="emptyState">
+          <div class="empty-state-icon">📷</div>
+          <div class="empty-state-text">Upload a table and select an environment to begin</div>
+        </div>
+
+        <div class="results-grid" id="resultsGrid">
+          <!-- Results will be added dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar" id="actionBar">
+      <div class="action-info">
+        <div class="selection-count" id="selectionCount">0 / 6</div>
+        <div>images selected</div>
+      </div>
+      <button class="action-btn btn-regenerate" id="regenerateBtn" style="display: none;">
+        🔄 Generate Missing Images
+      </button>
+      <button class="action-btn btn-download" id="downloadBtn" style="display: none;">
+        ⬇️ Download All Selected
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let uploadedTable = null;
+    let uploadedFilename = null;
+    let selectedEnvironment = null;
+    let generatedImages = [];
+    let selectedImages = new Set();
+
+    const environments = [
+      {
+        id: 'modern',
+        name: 'Modern',
+        icon: '🏙️',
+        description: 'Sleek, contemporary design with clean lines'
+      },
+      {
+        id: 'rustic',
+        name: 'Rustic',
+        icon: '🏡',
+        description: 'Countryside charm with natural materials'
+      },
+      {
+        id: 'london',
+        name: 'London',
+        icon: '🇬🇧',
+        description: 'British architecture and elegant interiors'
+      },
+      {
+        id: 'urban',
+        name: 'Urban',
+        icon: '🌆',
+        description: 'Dynamic city vibes with industrial touches'
+      },
+      {
+        id: 'nature',
+        name: 'Nature',
+        icon: '🌲',
+        description: 'Outdoor serenity with natural lighting'
+      }
+    ];
+
+    // Initialize
+    function init() {
+      renderEnvironments();
+      setupEventListeners();
+    }
+
+    // Render environments
+    function renderEnvironments() {
+      const grid = document.getElementById('envGrid');
+      grid.innerHTML = environments.map(env => `
+        <div class="env-card" data-env="${env.id}">
+          <div class="env-icon">${env.icon}</div>
+          <div class="env-info">
+            <div class="env-name">${env.name}</div>
+            <div class="env-desc">${env.description}</div>
+          </div>
+        </div>
+      `).join('');
+
+      // Add click handlers
+      document.querySelectorAll('.env-card').forEach(card => {
+        card.addEventListener('click', () => selectEnvironment(card.dataset.env));
+      });
+    }
+
+    // Select environment
+    function selectEnvironment(envId) {
+      selectedEnvironment = envId;
+
+      document.querySelectorAll('.env-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+
+      document.querySelector(`[data-env="${envId}"]`).classList.add('selected');
+
+      updateSteps();
+      updateGenerateButton();
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      const fileInput = document.getElementById('tableFile');
+      const uploadZone = document.getElementById('uploadZone');
+
+      fileInput.addEventListener('change', handleFileUpload);
+
+      uploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadZone.style.borderColor = '#667eea';
+      });
+
+      uploadZone.addEventListener('dragleave', () => {
+        uploadZone.style.borderColor = '';
+      });
+
+      uploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (e.dataTransfer.files.length > 0) {
+          fileInput.files = e.dataTransfer.files;
+          handleFileUpload({ target: fileInput });
+        }
+      });
+
+      document.getElementById('generateBtn').addEventListener('click', generateImages);
+      document.getElementById('regenerateBtn').addEventListener('click', regenerateMissing);
+      document.getElementById('downloadBtn').addEventListener('click', downloadSelected);
+    }
+
+    // Handle file upload
+    async function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      uploadedTable = file;
+
+      // Show preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('previewImage').src = e.target.result;
+        document.getElementById('tableName').textContent = file.name;
+        document.getElementById('tablePreview').classList.add('visible');
+        document.getElementById('uploadZone').classList.add('has-file');
+        updateSteps();
+        updateGenerateButton();
+      };
+      reader.readAsDataURL(file);
+
+      // Upload to server
+      await uploadToServer(file);
+    }
+
+    // Upload to server
+    async function uploadToServer(file) {
+      try {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          uploadedFilename = data.data.filename;
+          console.log('File uploaded:', uploadedFilename);
+        } else {
+          alert('Failed to upload file: ' + data.error);
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        alert('Failed to upload file');
+      }
+    }
+
+    // Update workflow steps
+    function updateSteps() {
+      document.getElementById('step1').classList.toggle('active', uploadedTable !== null);
+      document.getElementById('step2').classList.toggle('active', selectedEnvironment !== null);
+    }
+
+    // Update generate button
+    function updateGenerateButton() {
+      const btn = document.getElementById('generateBtn');
+      const canGenerate = uploadedTable && selectedEnvironment;
+
+      btn.disabled = !canGenerate;
+
+      if (!uploadedTable) {
+        btn.textContent = '📤 Upload table first';
+      } else if (!selectedEnvironment) {
+        btn.textContent = '🌍 Select environment';
+      } else {
+        btn.textContent = '🎨 Generate 6 Images';
+      }
+    }
+
+
+    // Add placeholder image
+    function addPlaceholderImage(index) {
+      const grid = document.getElementById('resultsGrid');
+      const placeholder = document.createElement('div');
+      placeholder.className = 'result-item generating';
+      placeholder.id = `result-${index}`;
+      placeholder.innerHTML = `
+        <div class="result-image"></div>
+        <div class="result-overlay">
+          <div class="spinner"></div>
+          <div>Generating...</div>
+        </div>
+        <div class="result-info">
+          <div class="result-table">Table ${index + 1}</div>
+          <div class="result-env">Environment: ${selectedEnvironment}</div>
+          <div class="result-angle">Random angle</div>
+        </div>
+        <div class="selection-badge">✓</div>
+      `;
+      grid.appendChild(placeholder);
+    }
+
+    // Generate images (call actual API)
+    async function generateImages() {
+      if (!uploadedFilename || !selectedEnvironment) {
+        alert('Please upload a table and select an environment');
+        return;
+      }
+
+      // Update UI
+      document.getElementById('step3').classList.add('active');
+      document.getElementById('emptyState').style.display = 'none';
+      document.getElementById('resultsGrid').classList.add('visible');
+      document.getElementById('generateBtn').disabled = true;
+
+      // Clear previous results
+      generatedImages = [];
+      selectedImages.clear();
+      document.getElementById('resultsGrid').innerHTML = '';
+
+      // Add placeholder cards
+      for (let i = 0; i < 6; i++) {
+        addPlaceholderImage(i);
+      }
+
+      try {
+        // Call API to generate all 6 images
+        const response = await fetch('/api/table-environment/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tableFilename: uploadedFilename,
+            environment: selectedEnvironment,
+            count: 6
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Update each result with actual generated image
+          data.data.results.forEach((result, i) => {
+            updateGeneratedImage(i, result);
+          });
+
+          document.getElementById('step4').classList.add('active');
+        } else {
+          alert('Generation failed: ' + data.error);
+        }
+      } catch (error) {
+        console.error('Generation error:', error);
+        alert('Network error during generation');
+      } finally {
+        document.getElementById('generateBtn').disabled = false;
+        updateActionBar();
+      }
+    }
+
+    // Update generated image in UI
+    function updateGeneratedImage(index, result) {
+      const resultItem = document.getElementById(`result-${index}`);
+      resultItem.classList.remove('generating');
+
+      if (result.success) {
+        const img = new Image();
+        img.onload = () => {
+          resultItem.querySelector('.result-image').style.backgroundImage = `url(${result.path})`;
+        };
+        img.src = result.path;
+
+        resultItem.querySelector('.result-angle').textContent = `Angle: ${result.angleType}`;
+
+        generatedImages.push({
+          index,
+          url: result.path,
+          filename: result.filename,
+          environment: result.environment,
+          angle: result.angle
+        });
+
+        // Add click handler for selection
+        resultItem.addEventListener('click', () => toggleSelection(index));
+      } else {
+        resultItem.querySelector('.result-overlay').innerHTML = `
+          <div style="color: #f8d7da; font-size: 0.9rem; padding: 20px; text-align: center;">
+            Failed: ${result.error}
+          </div>
+        `;
+        resultItem.querySelector('.result-overlay').style.display = 'flex';
+      }
+
+      updateResultCount();
+    }
+
+    // Toggle selection
+    function toggleSelection(index) {
+      const item = document.getElementById(`result-${index}`);
+
+      if (selectedImages.has(index)) {
+        selectedImages.delete(index);
+        item.classList.remove('selected');
+      } else {
+        selectedImages.add(index);
+        item.classList.add('selected');
+      }
+
+      updateActionBar();
+    }
+
+    // Update result count
+    function updateResultCount() {
+      document.getElementById('resultCount').textContent = `(${generatedImages.length} / 6)`;
+    }
+
+    // Update action bar
+    function updateActionBar() {
+      const actionBar = document.getElementById('actionBar');
+      const selectionCount = document.getElementById('selectionCount');
+      const regenerateBtn = document.getElementById('regenerateBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      if (generatedImages.length > 0) {
+        actionBar.classList.add('visible');
+        selectionCount.textContent = `${selectedImages.size} / 6`;
+
+        if (selectedImages.size === 6) {
+          // All selected - show download
+          regenerateBtn.style.display = 'none';
+          downloadBtn.style.display = 'block';
+        } else if (selectedImages.size > 0) {
+          // Some selected - show regenerate
+          regenerateBtn.style.display = 'block';
+          downloadBtn.style.display = 'none';
+          regenerateBtn.textContent = `🔄 Generate ${6 - selectedImages.size} Missing Image${6 - selectedImages.size > 1 ? 's' : ''}`;
+        } else {
+          // None selected
+          regenerateBtn.style.display = 'none';
+          downloadBtn.style.display = 'none';
+        }
+      }
+    }
+
+    // Regenerate missing
+    async function regenerateMissing() {
+      const missingIndices = [];
+      for (let i = 0; i < 6; i++) {
+        if (!selectedImages.has(i)) {
+          missingIndices.push(i);
+        }
+      }
+
+      if (missingIndices.length === 0) return;
+
+      // Mark items as generating
+      missingIndices.forEach(index => {
+        const item = document.getElementById(`result-${index}`);
+        item.classList.add('generating');
+        item.querySelector('.result-overlay').style.display = 'flex';
+        item.querySelector('.result-overlay').innerHTML = `
+          <div class="spinner"></div>
+          <div>Regenerating...</div>
+        `;
+      });
+
+      try {
+        // Call API again for full batch (simpler than selective regeneration)
+        const response = await fetch('/api/table-environment/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tableFilename: uploadedFilename,
+            environment: selectedEnvironment,
+            count: missingIndices.length
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Update only the missing slots
+          data.data.results.forEach((result, i) => {
+            const targetIndex = missingIndices[i];
+            updateGeneratedImage(targetIndex, result);
+          });
+        } else {
+          alert('Regeneration failed: ' + data.error);
+        }
+      } catch (error) {
+        console.error('Regeneration error:', error);
+        alert('Network error during regeneration');
+      }
+    }
+
+    // Download selected
+    async function downloadSelected() {
+      const selectedUrls = [];
+
+      selectedImages.forEach(index => {
+        const image = generatedImages.find(img => img.index === index);
+        if (image) {
+          selectedUrls.push({
+            url: image.url,
+            filename: image.filename
+          });
+        }
+      });
+
+      // Download each selected image
+      for (const {url, filename} of selectedUrls) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Small delay between downloads
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+
+      alert(`Downloaded ${selectedUrls.length} images!`);
+    }
+
+    // Initialize
+    init();
+  </script>
+</body>
+</html>

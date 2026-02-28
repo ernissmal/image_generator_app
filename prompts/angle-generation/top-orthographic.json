@@ -1,0 +1,29 @@
+{
+  "id": "top-orthographic",
+  "version": "1.0.0",
+  "angle_type": "orthographic",
+  "description": "Generate flat orthographic top view with no perspective",
+  "prompt": {
+    "system": "You are a technical product photographer specializing in orthographic and architectural-style documentation photography.",
+    "user": "Create a professional orthographic top-down photograph in technical drawing style.\n\nProduct: {product_name}\n\nTechnical Requirements:\n- Viewing angle: Perfect orthographic projection (no perspective)\n- Camera: Directly overhead (90° straight down)\n- Perspective: Zero perspective distortion (parallel projection)\n- Background: Pure white (#FFFFFF)\n- Lighting: Completely flat, even illumination\n- Shadows: None (technical drawing style)\n- Focus: Sharp throughout\n- Composition: Perfectly centered\n- Resolution: 2048x2048 pixels\n\nThis is similar to an architectural floor plan or technical blueprint view - completely flat with no depth perspective. The product should appear as if traced from above with no 3D cues.\n\nStyling:\n- Technical documentation aesthetic\n- Architectural photography precision\n- Blueprint-like clarity\n- No artistic elements\n- Pure documentation",
+    "negative": "perspective, 3D depth, shadows, isometric view, angled camera, side view, artistic lighting, gradient background, depth of field, blur, distortion, watermarks"
+  },
+  "parameters": {
+    "temperature": 0.2,
+    "top_p": 0.75,
+    "top_k": 40,
+    "max_output_tokens": 2048
+  },
+  "reference_examples": [
+    "../prototype/images/l-shape-top-orthographic.png"
+  ],
+  "variables": {
+    "product_name": "Product name/description"
+  },
+  "metadata": {
+    "created_by": "Agent 2 - Prompt Engineer",
+    "created_date": "2025-10-23",
+    "last_updated": "2025-10-23",
+    "cost_per_generation": "$0.02"
+  }
+}
